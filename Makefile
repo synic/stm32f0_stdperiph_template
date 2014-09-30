@@ -16,6 +16,7 @@ DEBUG = 1
 RAMBUILD = 0
 # optimization
 OPT = -O0
+#OPT = -Os
 
 #######################################
 # paths
@@ -50,7 +51,9 @@ SRCSASM = \
 #   core_cm0.c 
 PERIPHLIB_SOURCES = \
   stm32f0xx_gpio.c \
-  stm32f0xx_rcc.c
+  stm32f0xx_rcc.c \
+  stm32f0xx_tim.c \
+  stm32f0xx_dma.c
 
 #######################################
 # binaries
@@ -85,7 +88,7 @@ INCLUDES += -I$(PERIPHLIBPATH)/CMSIS/Include
 # compile gcc flags
 CFLAGS = -mthumb -mcpu=cortex-m0 $(DEFS) $(INCLUDES) $(OPT) -Wall
 ifeq ($(DEBUG), 1)
-CFLAGS += -g -gdwarf-2
+CFLAGS += -g -gdwarf-2 -fno-common -fdata-sections -ffunction-sections
 endif
 # Generate dependency information
 CFLAGS += -MD -MP -MF .dep/$(@F).d
@@ -100,7 +103,7 @@ else
 LDSCRIPT = linker/STM32F050G6_FLASH.ld
 endif
 # libraries
-LIBS = -lc -lm -lnosys
+LIBS = -Wl,--start-group -lc -lgcc -lnosys -Wl,--end-group
 LIBDIR =
 LDFLAGS = -mthumb -mcpu=cortex-m0 -specs=nano.specs -T$(LDSCRIPT) $(LIBS) -Wl,-Map=$(BUILD_DIR)/$(TARGET).map,--cref -Wl,--gc-sections
 

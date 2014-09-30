@@ -27,7 +27,7 @@ void GPIO_Configuration(void)
     RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
 
     GPIO_InitTypeDef GPIO_InitStructure;
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8;
+    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_8 | GPIO_Pin_9;
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
     GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
     GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
@@ -72,8 +72,10 @@ int main(void)
   while (1)
   {
     GPIO_SetBits(GPIOC, GPIO_Pin_8);
+    GPIO_ResetBits(GPIOC, GPIO_Pin_9);
     delay(500);
     GPIO_ResetBits(GPIOC, GPIO_Pin_8);
+    GPIO_SetBits(GPIOC, GPIO_Pin_9);
     delay(500);
   }
 
